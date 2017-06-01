@@ -32,6 +32,10 @@ for line in open("pima-indians-diabetes.csv", "r"):
 batch = np.asarray(batch)
 #batch = np.asarray(line.split(','))
 x_train = batch[:,:8].astype(np.float32)
+# Feature normalization is important.
+# Without the line below, I could only get up to 0.69 accuracy (which is not much better than 
+#   outputting 0's for all data (whose acc ~ 0.65).  Using feature normalization, accuracy
+#   of the model goes up to 0.77+ with monotonic decreasing loss (at 1000th itr)
 x_train = x_train / x_train.max(axis = 0)
 y_train = batch[:,8].reshape(768,1).astype(np.float32)
 
