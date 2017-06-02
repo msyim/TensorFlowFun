@@ -91,6 +91,8 @@ FL  = N1L3 + N2L3 + N3L3 + N4L3
 
 # With the second method, I can only get upto (acc ~ 0.95)
 
+# Ensemble of 4 networks can get up to acc ~ 0.974
+
 # Cost function
 cost1 = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=Y, logits=N1L3))
 cost2 = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=Y, logits=N2L3))
@@ -104,9 +106,6 @@ optimizer3 = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).mini
 optimizer4 = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost4)
 
 # Test model and check accuracy
-
-# Voting method.
-
 correct_pred = tf.equal(tf.argmax(FL,1), tf.argmax(Y,1))
 accuracy  = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
@@ -127,12 +126,6 @@ with tf.Session() as sess:
 			avg_cost2 += (l2)/(total_batch)
 			avg_cost3 += (l3)/(total_batch)
 			avg_cost4 += (l4)/(total_batch)            
-			
-			#for el in range( n1l1.shape[0]):
-			#	print n1l1[0]
-			#	print n1l2[0]
-			#	print n1l3[0]
-			#	print n1l4[0]
 		
 		print ('Epoch: ', '%04d' % (epoch + 1), 'cost1 = ', '{:.9f}'.format(avg_cost1), 'cost2 = ', '{:.9f}'.format(avg_cost2), 'cost3 = ', '{:.9f}'.format(avg_cost3), 'cost4 = ', '{:.9f}'.format(avg_cost4))
 		print('Accuracy:', sess.run(accuracy, feed_dict={X:mnist.test.images, Y:mnist.test.labels}))
